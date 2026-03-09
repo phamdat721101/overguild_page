@@ -1,20 +1,87 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 const X_URL = "https://x.com/overguildOG";
 const TELEGRAM_URL = "https://t.me/OverGuildVN";
+const CONTACT_EMAIL = "overguild2110@gmail.com";
 
 const JoinSection = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [requirements, setRequirements] = useState("");
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const body = `Name: ${name}\nEmail: ${email}\nRequirements:\n${requirements}`;
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=OverGuild Service Inquiry&body=${encodeURIComponent(body)}`;
+  };
+
   return (
-    <section className="relative py-14 md:py-20 overflow-hidden">
+    <section id="contact" className="relative py-14 md:py-20 overflow-hidden">
       <div className="absolute inset-0 bg-background" />
       <div className="absolute inset-0 bg-grid opacity-10" />
 
       <div className="relative z-10 container mx-auto px-6">
+        {/* Contact Form */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
+          className="max-w-xl mx-auto mb-16"
+        >
+          <div className="text-center mb-8">
+            <p className="font-pixel text-primary text-xs mb-3 tracking-widest">[ TRANSMISSION ]</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-3">
+              <span className="text-foreground">Send a </span>
+              <span className="text-glow-cyan text-primary">Message</span>
+            </h2>
+            <p className="text-muted-foreground text-base">
+              Have a project in mind? Tell us what you need.
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex flex-col sm:flex-row gap-4">
+              <input
+                type="text"
+                placeholder="Name"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="input-pixel w-full px-4 py-3 text-sm bg-background text-foreground placeholder:text-muted-foreground"
+              />
+              <input
+                type="email"
+                placeholder="Email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="input-pixel w-full px-4 py-3 text-sm bg-background text-foreground placeholder:text-muted-foreground"
+              />
+            </div>
+            <textarea
+              placeholder="Requirements"
+              required
+              rows={4}
+              value={requirements}
+              onChange={(e) => setRequirements(e.target.value)}
+              className="input-pixel w-full px-4 py-3 text-sm bg-background text-foreground placeholder:text-muted-foreground resize-none"
+            />
+            <div className="text-center">
+              <button type="submit" className="btn-pixel px-8 py-3 text-sm">
+                Send Inquiry
+              </button>
+            </div>
+          </form>
+        </motion.div>
+
+        {/* Social Links */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1 }}
           className="text-center max-w-xl mx-auto"
         >
           <h2 className="text-3xl md:text-5xl font-bold mb-4">

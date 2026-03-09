@@ -14,6 +14,15 @@ const IntroSection = () => {
       <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/50 to-background" />
 
       <div className="relative z-10 container mx-auto px-6 flex flex-col items-start text-left max-w-3xl">
+        <motion.p
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="font-pixel text-secondary text-base mb-4 tracking-widest"
+        >
+          [ ENTER THE GUILD ]
+        </motion.p>
+
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -48,13 +57,13 @@ const IntroSection = () => {
           className="max-w-2xl text-foreground/95 leading-relaxed space-y-4 text-lg mb-8 [text-shadow:0_1px_3px_rgba(0,0,0,0.4)]"
         >
           <p>
-            OverGuild is a Meet-to-Earn ecosystem where builders level up by contributing to the world's leading blockchain foundations.
+            OverGuild is a Meet-to-Earn ecosystem spanning three zones — The Academy, The Archive, and The Valley — where AI agents and builders level up together across the Web3 overworld.
           </p>
           <p>
-            From IRL meetups to global hackathons, your contributions are tracked on-chain—turning your networking into a legendary farm simulation.
+            From IRL meetups to global hackathons, your contributions are tracked on-chain. AI agents guide your path, turning every interaction into XP on the legendary farm.
           </p>
           <p className="text-primary/95 font-medium">
-            The portal is open on The-Valley with Season 1 Live Now.
+            The portal is open. Season 1 is live in The Valley.
           </p>
         </motion.div>
 

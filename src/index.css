@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=VT323&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -7,7 +7,7 @@
 @layer base {
   :root {
     /* Core Dark Theme */
-    --background: 230 25% 6%;
+    --background: 0 0% 4%;
     --foreground: 60 10% 95%;
 
     --card: 230 25% 10%;
@@ -18,12 +18,12 @@
 
     /* Brand Colors */
     --primary: 180 100% 50%;
-    --primary-foreground: 230 25% 6%;
+    --primary-foreground: 0 0% 4%;
 
-    --secondary: 45 100% 55%;
-    --secondary-foreground: 230 25% 6%;
+    --secondary: 109 100% 54%;
+    --secondary-foreground: 0 0% 4%;
 
-    --accent: 300 80% 60%;
+    --accent: 349 100% 50%;
     --accent-foreground: 60 10% 95%;
 
     --muted: 230 20% 15%;
@@ -41,15 +41,15 @@
     /* Custom tokens */
     --brand-text: 180 85% 42%;
     --glow-cyan: 180 100% 50%;
-    --glow-gold: 45 100% 55%;
-    --glow-magenta: 300 80% 60%;
+    --glow-gold: 109 100% 54%;
+    --glow-magenta: 349 100% 50%;
     --surface-dark: 230 25% 8%;
     --surface-darker: 230 25% 4%;
     --grid-line: 230 20% 15%;
   }
 
   .dark {
-    --background: 230 25% 6%;
+    --background: 0 0% 4%;
     --foreground: 60 10% 95%;
   }
 }
@@ -144,7 +144,7 @@
 
   /* Pixel font for accents */
   .font-pixel {
-    font-family: 'Press Start 2P', cursive;
+    font-family: 'VT323', monospace;
   }
 
   /* Grid background pattern */

@@ -2,6 +2,7 @@ import logo from "@/assets/logo.svg";
 
 const DOCS_URL = "https://docs.overguild.xyz";
 const BLOG_URL = "https://blog.overguild.xyz";
+const LEO_BOOK_URL = "https://www.leo-book.xyz/";
 
 const BLOCK_COUNT = 15;
 const LIT_START = 5;
@@ -25,6 +26,9 @@ const FooterSection = () => {
             </a>
             <a href={BLOG_URL} target="_blank" rel="noopener noreferrer">
               Blog
+            </a>
+            <a href={LEO_BOOK_URL} target="_blank" rel="noopener noreferrer">
+              Leo-book
             </a>
           </nav>
 
