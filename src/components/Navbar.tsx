@@ -6,6 +6,7 @@ const NAV_LINKS = [
   { label: "Academy", href: "#academy" },
   { label: "Archive", href: "#archive" },
   { label: "The Valley", href: "#valley" },
+  { label: "Community", href: "/community" },
   { label: "Contact", href: "#contact" },
 ];
 
