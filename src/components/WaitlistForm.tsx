@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 const WAITLIST_API =
-  import.meta.env.VITE_WAITLIST_API || "/api/waitlist";
+  import.meta.env.VITE_WAITLIST_API || "https://api.overguild.com/waitlist";
 const SOURCE = "landing-overguild";
 
 const WaitlistForm = () => {
