@@ -1,18 +1,34 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.svg";
 
 const NAV_LINKS = [
-  { label: "Academy", href: "#academy" },
-  { label: "Archive", href: "#archive" },
-  { label: "The Valley", href: "#valley" },
+  { label: "Academy", href: "/#academy" },
+  { label: "Archive", href: "/#archive" },
+  { label: "The Valley", href: "/#valley" },
   { label: "Community", href: "/community" },
-  { label: "Contact", href: "#contact" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.substring(1);
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 0);
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
+  }, [location]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,13 +64,13 @@ const Navbar = () => {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
             {NAV_LINKS.map((link) => (
-              <a
+              <Link
                 key={link.href}
-                href={link.href}
+                to={link.href}
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -83,14 +99,14 @@ const Navbar = () => {
           >
             <div className="container mx-auto px-6 py-2 flex flex-col">
               {NAV_LINKS.map((link) => (
-                <a
+                <Link
                   key={link.href}
-                  href={link.href}
+                  to={link.href}
                   onClick={() => setIsOpen(false)}
                   className="text-sm text-muted-foreground hover:text-primary transition-colors text-center py-2"
                 >
                   {link.label}
-                </a>
+                </Link>
               ))}
             </div>
           </motion.div>
