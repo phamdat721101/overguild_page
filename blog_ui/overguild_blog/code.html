@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>OVERGUILD | The Builder's Chronicle</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700&amp;family=VT323&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed-dim": "#00dec8",
+                        "outline-variant": "#3a4a47",
+                        "surface-container-high": "#272a32",
+                        "background": "#10131a",
+                        "on-primary-container": "#007165",
+                        "secondary": "#ffb694",
+                        "tertiary": "#ffffff",
+                        "surface-container": "#1d1f27",
+                        "inverse-primary": "#006b5f",
+                        "surface-container-low": "#191b23",
+                        "on-primary": "#003731",
+                        "secondary-fixed-dim": "#ffb694",
+                        "surface-dim": "#10131a",
+                        "secondary-container": "#ff6a00",
+                        "tertiary-fixed-dim": "#abd600",
+                        "on-tertiary": "#283500",
+                        "surface-tint": "#00dec8",
+                        "on-surface-variant": "#b9cac6",
+                        "on-tertiary-fixed-variant": "#3c4d00",
+                        "surface": "#10131a",
+                        "on-secondary": "#571f00",
+                        "on-primary-fixed-variant": "#005047",
+                        "primary": "#ffffff",
+                        "error": "#ffb4ab",
+                        "surface-container-highest": "#32353d",
+                        "on-surface": "#e1e2ec",
+                        "primary-fixed": "#00fee5",
+                        "inverse-surface": "#e1e2ec",
+                        "tertiary-fixed": "#c3f400",
+                        "on-tertiary-fixed": "#161e00",
+                        "tertiary-container": "#c3f400",
+                        "outline": "#839490",
+                        "on-error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#7b2f00",
+                        "on-tertiary-container": "#556d00",
+                        "error-container": "#93000a",
+                        "surface-bright": "#363941",
+                        "on-error": "#690005",
+                        "surface-variant": "#32353d",
+                        "on-primary-fixed": "#00201c",
+                        "on-secondary-container": "#571f00",
+                        "surface-container-lowest": "#0b0e15",
+                        "on-secondary-fixed": "#351000",
+                        "secondary-fixed": "#ffdbcc",
+                        "primary-container": "#00fee5",
+                        "inverse-on-surface": "#2d3038",
+                        "on-background": "#e1e2ec"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0px",
+                        "lg": "0px",
+                        "xl": "0px",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Inter"],
+                        "label": ["Space Grotesk"],
+                        "mono": ["VT323"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neon-glow-text {
+            text-shadow: 0 0 10px rgba(0, 254, 229, 0.5), 0 0 20px rgba(0, 254, 229, 0.3);
+        }
+        .neon-border-left {
+            border-left: 2px solid #00FEE5;
+        }
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0e15;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #00FEE5;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-fixed overflow-x-hidden">
+<!-- Top Navigation Shell -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-8 h-20 bg-[#10131a]/80 backdrop-blur-xl border-b-0">
+<div class="text-2xl font-black tracking-tighter text-white uppercase italic font-['Space_Grotesk']">OVERGUILD</div>
+<nav class="hidden md:flex items-center space-x-8 font-['Space_Grotesk'] tracking-tighter uppercase">
+<a class="text-white/60 hover:text-white transition-colors" href="#">Academy</a>
+<a class="text-white/60 hover:text-white transition-colors" href="#">Archive</a>
+<a class="text-white/60 hover:text-white transition-colors" href="#">The Valley</a>
+<a class="text-white/60 hover:text-white transition-colors" href="#">Community</a>
+<a class="text-white/60 hover:text-white transition-colors" href="#">Contact</a>
+<a class="text-[#00FEE5] font-bold border-b-2 border-[#00FEE5] pb-1" href="#">Blog</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="bg-primary-container text-on-primary-fixed px-6 py-2 font-headline font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_15px_rgba(0,254,229,0.4)] transition-all">
+                Connect Wallet
+            </button>
+</div>
+</header>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative w-full h-[716px] flex items-center justify-start px-8 overflow-hidden bg-surface-container-lowest">
+<!-- Background Decoration -->
+<div class="absolute top-0 right-0 w-1/2 h-full opacity-30 pointer-events-none">
+<div class="absolute inset-0 bg-gradient-to-l from-primary-container/20 to-transparent"></div>
+<img alt="Web3 Digital Landscape" class="w-full h-full object-cover mix-blend-screen" data-alt="Futuristic cybernetic city landscape with neon cyan data streams and deep dark space aesthetic, hyper-realistic 3D render" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5Gj1P-YuPOXL94leCzUbvWoTK0v7iBU_yEdw2PRRCwpqE0OF8rDtHYmAfFJ5EekvRlDBfzLUDqs67IOTBr7vMO4HgDJ-N-MOnsgjnr_zziUe_MFhbQ9T-YsHcfbV5u1MlTIYEY52WjFSCSqO7Rga7W6P_NguStjiuIzcsS44Zur-LoVnC6oFPUg30ufn_qDtlcK7sKl8DuUYmext5eEO9k2BM4IWbHty5UrOxY8ds9MmEEYOTP0KgqObbmmlYiMUUScgpvIJhqYFe"/>
+</div>
+<div class="relative z-10 max-w-4xl">
+<div class="flex items-center gap-3 mb-6">
+<span class="font-mono text-tertiary-fixed tracking-[0.2em] text-sm uppercase px-3 py-1 bg-surface-container-high">Featured Protocol</span>
+<div class="h-[1px] w-12 bg-primary-container"></div>
+</div>
+<h1 class="font-headline text-6xl md:text-8xl font-bold tracking-tighter text-white uppercase mb-4 leading-none">
+                    The Builder's <span class="text-primary-container neon-glow-text italic">Chronicle</span>
+</h1>
+<p class="font-headline text-xl text-white/70 max-w-2xl mb-8 uppercase tracking-tight">
+                    Documenting the ascent of the sovereign terminal. Exploring the frontiers of decentralized governance and the <span class="text-white">2026 Vision</span>.
+                </p>
+<div class="flex flex-wrap gap-4">
+<button class="bg-primary-container text-on-primary-fixed px-8 py-4 font-headline font-black uppercase text-lg group flex items-center gap-3 transition-all">
+                        Read Featured Article
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+<div class="flex items-center px-6 py-4 bg-surface-container-low border border-outline-variant/20 font-mono text-white/60">
+                        STATUS: TERMINAL_SOVEREIGN_ACTIVE
+                    </div>
+</div>
+</div>
+<!-- Atmospheric Glow -->
+<div class="absolute -bottom-24 -left-24 w-96 h-96 bg-primary-container/5 rounded-full blur-[100px]"></div>
+</section>
+<!-- Main Content Area -->
+<section class="max-w-[1440px] mx-auto px-8 py-20 flex flex-col lg:flex-row gap-12">
+<!-- Sidebar / Filters -->
+<aside class="w-full lg:w-80 shrink-0 space-y-12">
+<!-- Search Terminal -->
+<div class="p-6 bg-surface-container-low border-l-2 border-primary-container">
+<h3 class="font-headline text-xs font-bold text-white uppercase tracking-widest mb-4">Search_Terminal</h3>
+<div class="relative">
+<input class="w-full bg-surface-container-highest border-none focus:ring-0 text-white font-mono placeholder:text-white/20 p-4" placeholder="QUERY_KEYWORDS..." type="text"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-primary-container">search</span>
+</div>
+</div>
+<!-- Categories -->
+<div>
+<h3 class="font-headline text-xs font-bold text-white uppercase tracking-widest mb-6 flex items-center gap-2">
+<span class="w-2 h-2 bg-tertiary-fixed"></span> Index_Categories
+                    </h3>
+<ul class="space-y-2 font-headline uppercase tracking-tighter">
+<li>
+<a class="flex justify-between items-center p-3 hover:bg-primary-container/10 text-primary-container transition-all" href="#">
+<span>All Posts</span>
+<span class="font-mono text-xs opacity-50">[42]</span>
+</a>
+</li>
+<li>
+<a class="flex justify-between items-center p-3 hover:bg-surface-container-high text-white/60 hover:text-white transition-all" href="#">
+<span>Web3 Tech</span>
+<span class="font-mono text-xs opacity-50">[12]</span>
+</a>
+</li>
+<li>
+<a class="flex justify-between items-center p-3 hover:bg-surface-container-high text-white/60 hover:text-white transition-all" href="#">
+<span>Community Highlights</span>
+<span class="font-mono text-xs opacity-50">[08]</span>
+</a>
+</li>
+<li>
+<a class="flex justify-between items-center p-3 hover:bg-surface-container-high text-white/60 hover:text-white transition-all" href="#">
+<span>Game Dev</span>
+<span class="font-mono text-xs opacity-50">[15]</span>
+</a>
+</li>
+<li>
+<a class="flex justify-between items-center p-3 hover:bg-surface-container-high text-white/60 hover:text-white transition-all" href="#">
+<span>Partnerships</span>
+<span class="font-mono text-xs opacity-50">[07]</span>
+</a>
+</li>
+</ul>
+</div>
+<!-- Terminal Metadata -->
+<div class="p-6 bg-surface-container-lowest border border-outline-variant/10">
+<h3 class="font-mono text-[10px] text-tertiary-fixed uppercase tracking-widest mb-4">System_Status</h3>
+<div class="space-y-3 font-mono text-[11px] text-white/40">
+<div class="flex justify-between">
+<span>Uptime</span>
+<span class="text-white">99.99%</span>
+</div>
+<div class="flex justify-between">
+<span>Nodes Active</span>
+<span class="text-white">1,204</span>
+</div>
+<div class="flex justify-between">
+<span>Last Update</span>
+<span class="text-white">14:02 UTC</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Article Grid -->
+<div class="flex-1">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Article Card 1 -->
+<article class="group bg-surface-container-low border-b-2 border-transparent hover:border-primary-container transition-all flex flex-col">
+<div class="aspect-video overflow-hidden relative">
+<img alt="Protocol Interface" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" data-alt="Close up of a futuristic high-tech data interface with neon glowing charts and complex geometry, dark blue and cyan tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC720dQ3oEpnUg2SOGVE5-1uXrPkTpQ0XKYf7x-l3Np3GHfSY-O4RhLVza10DMArAb62Yv2d38VPOr5Gd6jqAmEc-bf9Of7KHlnjh1FFhO2u3Ie0yoaSWdIiMSTmtq3JkdQqt27d2-_85fn1mRcbxEaGdZ7RTwNSkCHPE7uhd5qE__q9XxFGVAk4Noadmub6Ivk8LSUM6rM4mhF6t3Olz3udhilzuF22Lyy95tnngTIr_9U3pse3gJ7kHPcWb2JECFb2LC66b1lSHNm"/>
+<div class="absolute top-4 left-4 bg-background px-3 py-1 font-mono text-[10px] text-tertiary-fixed uppercase">Web3 Tech</div>
+</div>
+<div class="p-8 flex flex-col flex-1">
+<time class="font-mono text-xs text-white/30 mb-2 uppercase">May 24, 2024 — 6 MIN READ</time>
+<h2 class="font-headline text-2xl font-bold text-white uppercase tracking-tighter mb-4 leading-tight group-hover:text-primary-container transition-colors">
+                                Architecture of the Overguild Sovereign Node
+                            </h2>
+<p class="text-white/50 text-sm mb-8 line-clamp-3">
+                                Unpacking the modular infrastructure that powers our latest decentralized validation protocol. Scalability meets absolute security.
+                            </p>
+<div class="mt-auto flex items-center justify-between">
+<a class="font-headline text-xs font-bold uppercase tracking-widest text-white hover:text-primary-container flex items-center gap-2 group/link" href="#">
+                                    Read Full Log <span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">east</span>
+</a>
+<span class="material-symbols-outlined text-white/10 group-hover:text-primary-container/20 transition-colors">terminal</span>
+</div>
+</div>
+</article>
+<!-- Article Card 2 -->
+<article class="group bg-surface-container-low border-b-2 border-transparent hover:border-primary-container transition-all flex flex-col">
+<div class="aspect-video overflow-hidden relative">
+<img alt="Community Gathering" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" data-alt="Dynamic abstract representation of digital community as interconnected nodes of golden light against a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJKAYqVPz4ebJIDx9mmrSEZffW8JvWyHt4IB2lACJ66VRFCs92MwVolLNeAt9ILlhkhALuwrDpeuQq_VrM3dY46RmMO5iliHf9KJsvNSE9dQpOYq4mVgngGPPyxZXQBxE7oH_Lphpq8DpdQagJjQpIXYyKXPnaIbVwF9RTZAfciRO6vJkXH2AikQ-raH0G9Dzq31yDqGHvyLtyI_IpCoXs6mpHNMJM1aPIUEWgEc-CoTXvGDxTXQ2VFjsM--R3viZcnGxWH38YYJ3c"/>
+<div class="absolute top-4 left-4 bg-background px-3 py-1 font-mono text-[10px] text-tertiary-fixed uppercase">Community</div>
+</div>
+<div class="p-8 flex flex-col flex-1">
+<time class="font-mono text-xs text-white/30 mb-2 uppercase">May 21, 2024 — 4 MIN READ</time>
+<h2 class="font-headline text-2xl font-bold text-white uppercase tracking-tighter mb-4 leading-tight group-hover:text-primary-container transition-colors">
+                                The Valley: A New Era of Contributor Rewards
+                            </h2>
+<p class="text-white/50 text-sm mb-8 line-clamp-3">
+                                Introducing the revised meritocratic distribution system for active guild members. Build more, earn more.
+                            </p>
+<div class="mt-auto flex items-center justify-between">
+<a class="font-headline text-xs font-bold uppercase tracking-widest text-white hover:text-primary-container flex items-center gap-2 group/link" href="#">
+                                    Read Full Log <span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">east</span>
+</a>
+<span class="material-symbols-outlined text-white/10 group-hover:text-primary-container/20 transition-colors">group</span>
+</div>
+</div>
+</article>
+<!-- Article Card 3 -->
+<article class="group bg-surface-container-low border-b-2 border-transparent hover:border-primary-container transition-all flex flex-col">
+<div class="aspect-video overflow-hidden relative">
+<img alt="Game Engine Rendering" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" data-alt="Close up of high-detail 3D game geometry in a dark environment with neon wireframe overlays, industrial tech style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcdwhccz0kP-8IHC6C4VGrdX2OywfTupJOpe92CrByUdMkriJcc8GGYhf1QwfbW2mkg82L00WT1NKivjeSasO2BC-mBRMbG-paqNrea2TCyPoUpcxOY7s_iZyOmolbP97QjcYszK_QQXRn83AiEYIflNhJYrXE6BtHBZG6qlrJh5rlyXhjpZwToioB2IzVk0vloeZBZ_eBA3HXrGcK18Cv7KVuzvGgnf6hLguCu3pJ90PBa-sihGJrs4gqWbpJ-XJO4HQKoMhFihaD"/>
+<div class="absolute top-4 left-4 bg-background px-3 py-1 font-mono text-[10px] text-tertiary-fixed uppercase">Game Dev</div>
+</div>
+<div class="p-8 flex flex-col flex-1">
+<time class="font-mono text-xs text-white/30 mb-2 uppercase">May 15, 2024 — 8 MIN READ</time>
+<h2 class="font-headline text-2xl font-bold text-white uppercase tracking-tighter mb-4 leading-tight group-hover:text-primary-container transition-colors">
+                                Real-time Raytracing in Web3 Gaming
+                            </h2>
+<p class="text-white/50 text-sm mb-8 line-clamp-3">
+                                How Overguild is pushing the limits of browser-based rendering for our upcoming metaverse integration.
+                            </p>
+<div class="mt-auto flex items-center justify-between">
+<a class="font-headline text-xs font-bold uppercase tracking-widest text-white hover:text-primary-container flex items-center gap-2 group/link" href="#">
+                                    Read Full Log <span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">east</span>
+</a>
+<span class="material-symbols-outlined text-white/10 group-hover:text-primary-container/20 transition-colors">sports_esports</span>
+</div>
+</div>
+</article>
+<!-- Article Card 4 -->
+<article class="group bg-surface-container-low border-b-2 border-transparent hover:border-primary-container transition-all flex flex-col">
+<div class="aspect-video overflow-hidden relative">
+<img alt="Hardware Components" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" data-alt="Aesthetic macro photo of circuit boards and microchips with glowing cyan light trails and high-tech industrial feel" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXrb9TGJ-Iq3kEQ7D25S_vif2zkaCtvOqSGDrhfYbrAFVv__iOggJb48c7ciR3Vf2K_8-MxA0qQKjNzfa_3UbJs7lzPnjZZ4TsfjsIyxuBcd-xt94SIP0J20C--s7oi1Q2syrND8N_Sk4Fgw53s-MGUTHG1D1NfbKGAihVKQjwc70UmnTD10eER0UlF880l7PKGJ_yo4ICMT8EnlLyUQ83jh-dUBBV3qrm5TyWNRQs1N1oP9CZOf3kPkXl0PtxAf5QnYaaSGdbgVQp"/>
+<div class="absolute top-4 left-4 bg-background px-3 py-1 font-mono text-[10px] text-tertiary-fixed uppercase">Partnerships</div>
+</div>
+<div class="p-8 flex flex-col flex-1">
+<time class="font-mono text-xs text-white/30 mb-2 uppercase">May 09, 2024 — 3 MIN READ</time>
+<h2 class="font-headline text-2xl font-bold text-white uppercase tracking-tighter mb-4 leading-tight group-hover:text-primary-container transition-colors">
+                                Overguild x Sol-Labs Strategic Alignment
+                            </h2>
+<p class="text-white/50 text-sm mb-8 line-clamp-3">
+                                Forging the future of cross-chain liquidity. A deep dive into our new collaborative liquidity pools.
+                            </p>
+<div class="mt-auto flex items-center justify-between">
+<a class="font-headline text-xs font-bold uppercase tracking-widest text-white hover:text-primary-container flex items-center gap-2 group/link" href="#">
+                                    Read Full Log <span class="material-symbols-outlined text-sm group-hover/link:translate-x-1 transition-transform">east</span>
+</a>
+<span class="material-symbols-outlined text-white/10 group-hover:text-primary-container/20 transition-colors">handshake</span>
+</div>
+</div>
+</article>
+</div>
+<!-- Pagination Terminal -->
+<div class="mt-16 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
+<div class="font-mono text-[10px] text-white/40 uppercase tracking-widest">
+                        SHOWING <span class="text-white">01-04</span> OF <span class="text-white">42</span> ENTRIES
+                    </div>
+<div class="flex gap-2">
+<button class="w-12 h-12 flex items-center justify-center bg-surface-container-low text-white/20 hover:text-primary-container transition-all">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-12 h-12 flex items-center justify-center bg-primary-container text-on-primary-fixed font-headline font-bold">1</button>
+<button class="w-12 h-12 flex items-center justify-center bg-surface-container-low text-white hover:bg-surface-container-high font-headline font-bold">2</button>
+<button class="w-12 h-12 flex items-center justify-center bg-surface-container-low text-white hover:bg-surface-container-high font-headline font-bold">3</button>
+<button class="w-12 h-12 flex items-center justify-center bg-surface-container-low text-white/20 hover:text-primary-container transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter / CTA -->
+<section class="w-full bg-[#0d1017] py-24 px-8 border-t border-outline-variant/10">
+<div class="max-w-4xl mx-auto text-center">
+<h2 class="font-headline text-4xl font-bold text-white uppercase tracking-tighter mb-6">
+                    Stay Connected to the <span class="text-tertiary-fixed">Network</span>
+</h2>
+<p class="font-headline text-white/50 mb-10 max-w-xl mx-auto">
+                    Subscribe to the Builder's Chronicle. Receive technical logs, guild updates, and frontier research directly to your terminal.
+                </p>
+<form class="flex flex-col md:flex-row gap-4 max-w-lg mx-auto">
+<input class="flex-1 bg-surface-container-lowest border border-outline-variant/20 focus:border-primary-container focus:ring-0 text-white font-mono p-4" placeholder="ENCRYPTED_EMAIL_ADDRESS" type="email"/>
+<button class="bg-primary-container text-on-primary-fixed px-8 py-4 font-headline font-black uppercase tracking-widest hover:brightness-110 transition-all">
+                        Initialize
+                    </button>
+</form>
+<div class="mt-6 font-mono text-[10px] text-white/20 uppercase">
+                    NO SPAM. JUST PURE DATA. SECURE TRANSMISSION GUARANTEED.
+                </div>
+</div>
+</section>
+</main>
+<!-- Footer Shell -->
+<footer class="w-full py-12 px-8 flex flex-col md:flex-row justify-between items-center gap-6 bg-[#0a0c10] border-t-0">
+<div class="text-[#00FEE5] font-bold font-['Space_Grotesk'] uppercase tracking-widest text-lg">OVERGUILD</div>
+<div class="flex flex-wrap justify-center gap-8 font-['VT323'] text-sm tracking-widest">
+<a class="text-white/40 hover:text-[#C3F400] transition-colors" href="#">Docs</a>
+<a class="text-[#00FEE5] underline" href="#">Blog</a>
+<a class="text-white/40 hover:text-[#C3F400] transition-colors" href="#">Leo-book</a>
+</div>
+<div class="font-['VT323'] text-sm tracking-widest text-white/40 text-center md:text-right">
+            © 2024 OVERGUILD. TERMINAL SOVEREIGN STATUS ACTIVE.
+        </div>
+</footer>
+<!-- FAB Suppression Logic: Not rendering on blog index -->
+</body></html>

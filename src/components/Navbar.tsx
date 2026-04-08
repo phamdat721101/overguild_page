@@ -8,6 +8,7 @@ const NAV_LINKS = [
   { label: "Archive", href: "/#archive" },
   { label: "The Valley", href: "/#valley" },
   { label: "Community", href: "/community" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/#contact" },
 ];
 
@@ -63,15 +64,23 @@ const Navbar = () => {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors"
-              >
-                {link.label}
-              </Link>
-            ))}
+            {NAV_LINKS.map((link) => {
+              const isPage = !link.href.includes("#");
+              const isActive = isPage && location.pathname.startsWith(link.href);
+              return (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className={`text-sm transition-colors ${
+                    isActive
+                      ? "text-primary border-b-2 border-primary pb-1"
+                      : "text-muted-foreground hover:text-primary"
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Mobile Hamburger */}
@@ -98,16 +107,22 @@ const Navbar = () => {
             className="md:hidden bg-background/95 backdrop-blur border-b border-border overflow-hidden"
           >
             <div className="container mx-auto px-6 py-2 flex flex-col">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  onClick={() => setIsOpen(false)}
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors text-center py-2"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {NAV_LINKS.map((link) => {
+                const isPage = !link.href.includes("#");
+                const isActive = isPage && location.pathname.startsWith(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`text-sm transition-colors text-center py-2 ${
+                      isActive ? "text-primary" : "text-muted-foreground hover:text-primary"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                );
+              })}
             </div>
           </motion.div>
         )}

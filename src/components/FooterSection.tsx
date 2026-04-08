@@ -1,7 +1,7 @@
+import { Link } from "react-router-dom";
 import logo from "@/assets/logo.svg";
 
 const DOCS_URL = "https://docs.overguild.xyz";
-const BLOG_URL = "https://blog.overguild.xyz";
 const LEO_BOOK_URL = "https://www.leo-book.xyz/";
 
 const BLOCK_COUNT = 15;
@@ -24,9 +24,9 @@ const FooterSection = () => {
             <a href={DOCS_URL} target="_blank" rel="noopener noreferrer">
               Docs
             </a>
-            <a href={BLOG_URL} target="_blank" rel="noopener noreferrer">
+            <Link to="/blog">
               Blog
-            </a>
+            </Link>
             <a href={LEO_BOOK_URL} target="_blank" rel="noopener noreferrer">
               Leo-book
             </a>

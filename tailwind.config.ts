@@ -13,6 +13,22 @@ export default {
       },
     },
     extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            '--tw-prose-body': 'hsl(var(--foreground) / 0.7)',
+            '--tw-prose-headings': 'hsl(var(--foreground))',
+            '--tw-prose-links': 'hsl(var(--primary))',
+            '--tw-prose-bold': 'hsl(var(--foreground))',
+            '--tw-prose-quotes': 'hsl(var(--foreground) / 0.8)',
+            '--tw-prose-quote-borders': 'hsl(var(--primary))',
+            '--tw-prose-code': 'hsl(var(--primary))',
+            '--tw-prose-pre-bg': 'hsl(var(--surface-darker))',
+            '--tw-prose-pre-code': 'hsl(var(--foreground) / 0.8)',
+            maxWidth: 'none',
+          },
+        },
+      },
       fontFamily: {
         sans: ["Space Grotesk", "sans-serif"],
         pixel: ["Press Start 2P", "cursive"],
@@ -101,5 +117,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config;
