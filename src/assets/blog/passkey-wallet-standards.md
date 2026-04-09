@@ -6,7 +6,7 @@ category: Web3 Tech
 author: Terminal_Admin
 readTime: 12 MIN READ
 coverImage: /blog/account.jpg
-featured: true
+featured: false
 ---
 
 Tempo is treating passkeys as a first-class signing primitive at the protocol and wallet layer, while MoonPay's Open Wallet Standard is defining a multi-chain, agent-oriented wallet standard that chain foundations (Ethereum, Solana, etc.) help shape; both are complementary but there is still no single, FIDO-style "passkey wallet standard" across chains. Instead, you see a convergence around: WebAuthn/P-256 signatures at the protocol or wallet layer, plus multi-chain, threshold-signature based standards for how wallets expose capabilities to apps and AI agents.
