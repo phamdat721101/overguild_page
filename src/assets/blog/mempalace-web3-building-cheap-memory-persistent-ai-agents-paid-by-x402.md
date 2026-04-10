@@ -6,7 +6,7 @@ category: AI & Web3
 author: Terminal_Admin
 readTime: 12 MIN READ
 coverImage: /blog/mem-paid.jpg
-featured: true
+featured: false
 ---
 
 **MemPalace** is currently the highest-scoring open-source AI memory system ever benchmarked — 96.6% recall on LongMemEval with zero API calls, zero cloud, and zero subscription cost — and it directly solves the #1 cost driver in AI agent development: bloated, repetitive context windows.
