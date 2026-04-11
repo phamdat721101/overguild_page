@@ -6,7 +6,7 @@ category: AI & Web3
 author: Terminal_Admin
 readTime: 12 MIN READ
 coverImage: /blog/x402-upto-payment-deep-dive.png
-featured: true
+featured: false
 ---
 
 **x402** is an open, internet-native payment protocol built on the HTTP 402 "Payment Required" status code. Developed by Coinbase's Developer Platform team, x402 enables any API or web service to require payment before serving content — making native, programmatic payments possible between clients and servers through a universal HTTP standard.
