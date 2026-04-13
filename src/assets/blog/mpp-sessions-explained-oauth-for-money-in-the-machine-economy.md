@@ -6,7 +6,7 @@ category: Web3 Tech
 author: Terminal_Admin
 readTime: 14 MIN READ
 coverImage: /blog/mpp.jpeg
-featured: true
+featured: false
 ---
 
 > **Tags:** `#MPP` `#Tempo` `#x402` `#ACP` `#AP2` `#MCP` `#EIP-712` `#Stripe` `#AI Agents` `#Stablecoins` `#HTTP402` `#TIP-20`
