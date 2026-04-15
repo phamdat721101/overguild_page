@@ -6,7 +6,7 @@ category: Web3 Tech
 author: Terminal_Admin
 readTime: 25 MIN READ
 coverImage: /blog/tempo-account.png
-featured: true
+featured: false
 ---
 
 ## Executive Summary
