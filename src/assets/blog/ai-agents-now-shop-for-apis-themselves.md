@@ -6,7 +6,7 @@ category: AI & Web3
 author: Terminal_Admin
 readTime: 12 MIN READ
 coverImage: /blog/bazaar.png
-featured: true
+featured: false
 ---
 
 > How x402 Bazaar turns the internet into a machine-readable marketplace — and how you can build on it today with our open-source x402-kit on Base.
