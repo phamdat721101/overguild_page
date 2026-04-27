@@ -6,7 +6,7 @@ category: AI & Web3
 author: Terminal_Admin
 readTime: 20 MIN READ
 coverImage: /blog/gbrain.png
-featured: true
+featured: false
 ---
 
 # 🧠 What is GBrain?

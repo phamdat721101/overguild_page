@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>x402 Facilitator — Deep Dive</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root, [data-theme="light"] {
+  --color-bg: #f7f6f2;
+  --color-surface: #f9f8f5;
+  --color-surface-2: #fbfbf9;
+  --color-surface-offset: #f3f0ec;
+  --color-surface-offset-2: #edeae5;
+  --color-divider: #dcd9d5;
+  --color-border: #d4d1ca;
+  --color-text: #28251d;
+  --color-text-muted: #7a7974;
+  --color-text-faint: #bab9b4;
+  --color-primary: #01696f;
+  --color-primary-hover: #0c4e54;
+  --color-primary-highlight: #cedcd8;
+  --color-orange: #da7101;
+  --color-gold: #d19900;
+  --color-blue: #006494;
+  --color-purple: #7a39bb;
+  --color-success: #437a22;
+  --color-error: #a12c7b;
+  --shadow-sm: 0 1px 2px rgba(40,37,29,0.06);
+  --shadow-md: 0 4px 12px rgba(40,37,29,0.08);
+  --shadow-lg: 0 12px 32px rgba(40,37,29,0.12);
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.875rem);
+  --text-sm: clamp(0.875rem, 0.8rem + 0.35vw, 1rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.125rem, 1rem + 0.75vw, 1.5rem);
+  --text-xl: clamp(1.5rem, 1.2rem + 1.25vw, 2.25rem);
+  --text-2xl: clamp(2rem, 1.2rem + 2.5vw, 3.5rem);
+  --space-1: 0.25rem; --space-2: 0.5rem; --space-3: 0.75rem; --space-4: 1rem;
+  --space-5: 1.25rem; --space-6: 1.5rem; --space-8: 2rem; --space-10: 2.5rem;
+  --space-12: 3rem; --space-16: 4rem; --space-20: 5rem;
+  --transition: 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-theme="dark"] {
+  --color-bg: #0f0f0d;
+  --color-surface: #141412;
+  --color-surface-2: #181816;
+  --color-surface-offset: #1c1c1a;
+  --color-surface-offset-2: #222220;
+  --color-divider: #252522;
+  --color-border: #323230;
+  --color-text: #e8e6e2;
+  --color-text-muted: #8a8880;
+  --color-text-faint: #56554f;
+  --color-primary: #4f98a3;
+  --color-primary-hover: #3d8490;
+  --color-primary-highlight: #1e3535;
+  --color-orange: #fdab43;
+  --color-gold: #e8af34;
+  --color-blue: #5591c7;
+  --color-purple: #a86fdf;
+  --color-success: #6daa45;
+  --color-error: #d163a7;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+  --shadow-lg: 0 12px 32px rgba(0,0,0,0.4);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
+body {
+  min-height: 100dvh;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.7;
+  transition: background var(--transition), color var(--transition);
+}
+img, svg { display: block; max-width: 100%; }
+h1, h2, h3, h4 { text-wrap: balance; line-height: 1.2; }
+
+/* TOPBAR */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-3) var(--space-8);
+  background: color-mix(in oklab, var(--color-bg) 85%, transparent);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--color-border);
+}
+.topbar-brand { display: flex; align-items: center; gap: var(--space-2); }
+.topbar-logo {
+  width: 28px; height: 28px;
+  background: var(--color-primary);
+  border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.75rem; color: #fff; letter-spacing: -0.5px;
+}
+.topbar-name { font-size: var(--text-sm); font-weight: 600; color: var(--color-text); }
+.topbar-meta { font-size: var(--text-xs); color: var(--color-text-muted); margin-top: 1px; }
+.theme-toggle {
+  background: var(--color-surface-offset); border: 1px solid var(--color-border);
+  border-radius: var(--radius-full, 9999px); padding: var(--space-2) var(--space-3);
+  cursor: pointer; color: var(--color-text-muted); font-size: var(--text-sm);
+  display: flex; align-items: center; gap: var(--space-2);
+  transition: all var(--transition);
+}
+.theme-toggle:hover { color: var(--color-text); background: var(--color-surface-offset-2); }
+.radius-full { border-radius: 9999px; }
+
+/* HERO */
+.hero {
+  padding: var(--space-16) var(--space-8) var(--space-12);
+  max-width: 800px; margin: 0 auto;
+}
+.hero-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-6); }
+.tag {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  padding: 2px var(--space-3);
+  border-radius: 9999px;
+  font-size: var(--text-xs); font-weight: 500;
+  border: 1px solid;
+  text-decoration: none;
+  transition: all var(--transition);
+}
+.tag-blue { color: var(--color-blue); border-color: color-mix(in oklab, var(--color-blue) 30%, transparent); background: color-mix(in oklab, var(--color-blue) 8%, transparent); }
+.tag-purple { color: var(--color-purple); border-color: color-mix(in oklab, var(--color-purple) 30%, transparent); background: color-mix(in oklab, var(--color-purple) 8%, transparent); }
+.tag-gold { color: var(--color-gold); border-color: color-mix(in oklab, var(--color-gold) 30%, transparent); background: color-mix(in oklab, var(--color-gold) 8%, transparent); }
+.tag-green { color: var(--color-success); border-color: color-mix(in oklab, var(--color-success) 30%, transparent); background: color-mix(in oklab, var(--color-success) 8%, transparent); }
+.tag-primary { color: var(--color-primary); border-color: color-mix(in oklab, var(--color-primary) 30%, transparent); background: color-mix(in oklab, var(--color-primary) 8%, transparent); }
+.tag-orange { color: var(--color-orange); border-color: color-mix(in oklab, var(--color-orange) 30%, transparent); background: color-mix(in oklab, var(--color-orange) 8%, transparent); }
+.tag:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  padding: var(--space-1) var(--space-3);
+  background: color-mix(in oklab, var(--color-primary) 12%, transparent);
+  border: 1px solid color-mix(in oklab, var(--color-primary) 30%, transparent);
+  border-radius: 9999px;
+  font-size: var(--text-xs); font-weight: 600; color: var(--color-primary);
+  margin-bottom: var(--space-5); text-transform: uppercase; letter-spacing: 0.08em;
+}
+.hero h1 {
+  font-size: var(--text-2xl); font-weight: 700;
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+  letter-spacing: -0.03em;
+}
+.hero h1 span { color: var(--color-primary); }
+.hero-desc {
+  font-size: var(--text-lg); color: var(--color-text-muted);
+  max-width: 60ch; margin-bottom: var(--space-8); line-height: 1.6;
+}
+.hero-meta { display: flex; align-items: center; gap: var(--space-4); flex-wrap: wrap; }
+.hero-meta-item { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); color: var(--color-text-muted); }
+.hero-meta-item .icon { font-size: 1rem; }
+.divider { height: 1px; background: var(--color-divider); margin: var(--space-2) 0; }
+
+/* TOC */
+.toc-wrap { max-width: 800px; margin: 0 auto var(--space-8); padding: 0 var(--space-8); }
+.toc {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6);
+}
+.toc-title {
+  font-size: var(--text-xs); font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--color-text-muted); margin-bottom: var(--space-3);
+  display: flex; align-items: center; gap: var(--space-2);
+}
+.toc ol { list-style: none; counter-reset: toc; display: flex; flex-direction: column; gap: var(--space-1); }
+.toc ol li { counter-increment: toc; }
+.toc ol li a {
+  display: flex; align-items: center; gap: var(--space-2);
+  text-decoration: none; color: var(--color-text-muted); font-size: var(--text-sm);
+  padding: var(--space-1) var(--space-2); border-radius: var(--radius-sm);
+  transition: all var(--transition);
+}
+.toc ol li a::before { content: counter(toc, decimal-leading-zero); font-size: var(--text-xs); color: var(--color-text-faint); font-variant-numeric: tabular-nums; min-width: 20px; }
+.toc ol li a:hover { background: var(--color-surface-offset); color: var(--color-primary); }
+
+/* CONTENT AREA */
+.content { max-width: 800px; margin: 0 auto; padding: 0 var(--space-8) var(--space-20); }
+
+/* SECTION HEADERS */
+.section-header {
+  display: flex; align-items: center; gap: var(--space-3);
+  margin-bottom: var(--space-6); margin-top: var(--space-12);
+  padding-bottom: var(--space-4); border-bottom: 1px solid var(--color-border);
+}
+.section-header:first-child { margin-top: 0; }
+.section-icon {
+  width: 36px; height: 36px; border-radius: var(--radius-md);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+}
+.icon-teal { background: color-mix(in oklab, var(--color-primary) 15%, transparent); }
+.icon-orange { background: color-mix(in oklab, var(--color-orange) 15%, transparent); }
+.icon-purple { background: color-mix(in oklab, var(--color-purple) 15%, transparent); }
+.icon-blue { background: color-mix(in oklab, var(--color-blue) 15%, transparent); }
+.icon-gold { background: color-mix(in oklab, var(--color-gold) 15%, transparent); }
+.icon-green { background: color-mix(in oklab, var(--color-success) 15%, transparent); }
+
+.section-header h2 {
+  font-size: var(--text-lg); font-weight: 700; color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+.section-header .section-number {
+  font-size: var(--text-xs); color: var(--color-text-faint); font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+/* BODY TEXT */
+.body-text { font-size: var(--text-base); color: var(--color-text-muted); line-height: 1.75; margin-bottom: var(--space-5); max-width: 68ch; }
+.body-text a { color: var(--color-primary); text-decoration: none; border-bottom: 1px solid color-mix(in oklab, var(--color-primary) 40%, transparent); }
+.body-text a:hover { border-color: var(--color-primary); }
+strong { color: var(--color-text); font-weight: 600; }
+.lead { font-size: var(--text-lg); color: var(--color-text); line-height: 1.6; margin-bottom: var(--space-6); font-weight: 400; }
+
+/* CALLOUT */
+.callout {
+  display: flex; gap: var(--space-3); padding: var(--space-4) var(--space-5);
+  border-radius: var(--radius-lg); margin-bottom: var(--space-6);
+  border: 1px solid;
+}
+.callout-info { background: color-mix(in oklab, var(--color-primary) 6%, var(--color-surface)); border-color: color-mix(in oklab, var(--color-primary) 20%, transparent); }
+.callout-warn { background: color-mix(in oklab, var(--color-orange) 6%, var(--color-surface)); border-color: color-mix(in oklab, var(--color-orange) 20%, transparent); }
+.callout-tip { background: color-mix(in oklab, var(--color-success) 6%, var(--color-surface)); border-color: color-mix(in oklab, var(--color-success) 20%, transparent); }
+.callout-icon { font-size: 1.1rem; flex-shrink: 0; padding-top: 2px; }
+.callout-body { font-size: var(--text-sm); line-height: 1.6; color: var(--color-text); }
+.callout-body b { color: var(--color-text); }
+
+/* FEATURE CARDS */
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr)); gap: var(--space-4); margin-bottom: var(--space-6); }
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  transition: all var(--transition);
+}
+.card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: color-mix(in oklab, var(--color-primary) 30%, var(--color-border)); }
+.card-icon { font-size: 1.5rem; margin-bottom: var(--space-3); }
+.card h3 { font-size: var(--text-sm); font-weight: 700; color: var(--color-text); margin-bottom: var(--space-2); }
+.card p { font-size: var(--text-xs); color: var(--color-text-muted); line-height: 1.6; }
+
+/* FLOW DIAGRAM */
+.flow {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
+  margin-bottom: var(--space-8);
+  overflow-x: auto;
+}
+.flow-title {
+  font-size: var(--text-xs); font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--color-text-muted); margin-bottom: var(--space-6);
+  display: flex; align-items: center; gap: var(--space-2);
+}
+.flow-steps { display: flex; flex-direction: column; gap: 0; position: relative; }
+.flow-step {
+  display: grid; grid-template-columns: 40px 1fr; gap: var(--space-4); position: relative;
+}
+.flow-step:not(:last-child)::after {
+  content: ''; position: absolute; left: 19px; top: 40px;
+  width: 2px; height: calc(100% - 8px);
+  background: linear-gradient(to bottom, var(--color-primary), color-mix(in oklab, var(--color-primary) 20%, transparent));
+}
+.flow-num {
+  width: 40px; height: 40px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--text-xs); font-weight: 700; flex-shrink: 0; z-index: 1;
+  border: 2px solid;
+}
+.flow-num-active { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+.flow-num-verify { background: color-mix(in oklab, var(--color-blue) 15%, var(--color-surface)); border-color: var(--color-blue); color: var(--color-blue); }
+.flow-num-settle { background: color-mix(in oklab, var(--color-success) 15%, var(--color-surface)); border-color: var(--color-success); color: var(--color-success); }
+.flow-num-done { background: color-mix(in oklab, var(--color-gold) 15%, var(--color-surface)); border-color: var(--color-gold); color: var(--color-gold); }
+.flow-body { padding: var(--space-2) 0 var(--space-8); }
+.flow-label { font-size: var(--text-sm); font-weight: 700; color: var(--color-text); margin-bottom: var(--space-1); }
+.flow-desc { font-size: var(--text-xs); color: var(--color-text-muted); line-height: 1.6; max-width: 55ch; }
+.flow-code {
+  display: inline-flex; align-items: center; gap: var(--space-1);
+  background: var(--color-surface-offset); border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm); padding: 1px var(--space-2); margin-top: var(--space-2);
+  font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-primary);
+}
+
+/* CODE BLOCK */
+.code-wrap { position: relative; margin-bottom: var(--space-6); }
+.code-label {
+  position: absolute; top: 0; right: 0;
+  background: var(--color-surface-offset); border: 1px solid var(--color-border);
+  border-radius: 0 var(--radius-lg) 0 var(--radius-md);
+  padding: 2px var(--space-3); font-size: var(--text-xs); color: var(--color-text-faint);
+  font-family: var(--font-mono);
+}
+.code-block {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5) var(--space-6);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  color: var(--color-text);
+}
+.code-block .comment { color: var(--color-text-faint); }
+.code-block .keyword { color: var(--color-purple); }
+.code-block .string { color: var(--color-success); }
+.code-block .func { color: var(--color-blue); }
+.code-block .type { color: var(--color-orange); }
+.code-block .const { color: var(--color-primary); }
+
+/* STEP LIST */
+.step-list { display: flex; flex-direction: column; gap: var(--space-3); margin-bottom: var(--space-6); }
+.step-item {
+  display: flex; gap: var(--space-4); align-items: flex-start;
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-4) var(--space-5);
+  transition: all var(--transition);
+}
+.step-item:hover { border-color: color-mix(in oklab, var(--color-primary) 40%, var(--color-border)); }
+.step-num {
+  min-width: 28px; height: 28px; border-radius: 50%;
+  background: color-mix(in oklab, var(--color-primary) 12%, transparent);
+  border: 1.5px solid color-mix(in oklab, var(--color-primary) 40%, transparent);
+  color: var(--color-primary); font-size: var(--text-xs); font-weight: 700;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.step-content h4 { font-size: var(--text-sm); font-weight: 700; color: var(--color-text); margin-bottom: 3px; }
+.step-content p { font-size: var(--text-xs); color: var(--color-text-muted); line-height: 1.6; max-width: 55ch; }
+
+/* ECOSYSTEM TABLE */
+.eco-table { width: 100%; border-collapse: collapse; margin-bottom: var(--space-6); font-size: var(--text-sm); }
+.eco-table th {
+  text-align: left; padding: var(--space-2) var(--space-4);
+  font-size: var(--text-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--color-text-muted); border-bottom: 1px solid var(--color-border);
+}
+.eco-table td {
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-text); border-bottom: 1px solid color-mix(in oklab, var(--color-border) 50%, transparent);
+  font-size: var(--text-sm); vertical-align: middle;
+}
+.eco-table tr:last-child td { border-bottom: none; }
+.eco-table tr:hover td { background: var(--color-surface-offset); }
+.eco-link { color: var(--color-primary); text-decoration: none; font-weight: 500; }
+.eco-link:hover { text-decoration: underline; }
+.badge-sm {
+  display: inline-block; padding: 2px var(--space-2); border-radius: 9999px;
+  font-size: 11px; font-weight: 600; font-family: var(--font-mono);
+}
+.badge-live { background: color-mix(in oklab, var(--color-success) 12%, transparent); color: var(--color-success); border: 1px solid color-mix(in oklab, var(--color-success) 25%, transparent); }
+.badge-beta { background: color-mix(in oklab, var(--color-orange) 12%, transparent); color: var(--color-orange); border: 1px solid color-mix(in oklab, var(--color-orange) 25%, transparent); }
+
+/* ENDPOINT BLOCKS */
+.endpoint-group { display: flex; flex-direction: column; gap: var(--space-4); margin-bottom: var(--space-6); }
+.endpoint {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); overflow: hidden;
+}
+.endpoint-header {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-3) var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface-offset);
+}
+.method {
+  font-family: var(--font-mono); font-size: var(--text-xs); font-weight: 700;
+  padding: 2px var(--space-2); border-radius: var(--radius-sm);
+}
+.method-post { background: color-mix(in oklab, var(--color-blue) 15%, transparent); color: var(--color-blue); }
+.method-get { background: color-mix(in oklab, var(--color-success) 15%, transparent); color: var(--color-success); }
+.endpoint-path { font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-text); font-weight: 600; }
+.endpoint-body { padding: var(--space-4) var(--space-5); }
+.endpoint-body p { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.6; }
+.endpoint-body .param-list { margin-top: var(--space-3); display: flex; flex-direction: column; gap: var(--space-2); }
+.param { display: flex; gap: var(--space-3); align-items: flex-start; }
+.param-name { font-family: var(--font-mono); font-size: var(--text-xs); color: var(--color-primary); background: var(--color-primary-highlight); padding: 1px 6px; border-radius: var(--radius-sm); flex-shrink: 0; margin-top: 2px; }
+.param-desc { font-size: var(--text-xs); color: var(--color-text-muted); line-height: 1.5; }
+
+/* RESOURCE LINKS */
+.resources { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(240px, 100%), 1fr)); gap: var(--space-4); margin-bottom: var(--space-6); }
+.resource {
+  display: flex; flex-direction: column; justify-content: space-between;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  text-decoration: none;
+  transition: all var(--transition);
+}
+.resource:hover { border-color: var(--color-primary); box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.resource-icon { font-size: 1.4rem; margin-bottom: var(--space-3); }
+.resource-name { font-size: var(--text-sm); font-weight: 700; color: var(--color-text); margin-bottom: var(--space-1); }
+.resource-desc { font-size: var(--text-xs); color: var(--color-text-muted); line-height: 1.5; flex: 1; }
+.resource-arrow { font-size: var(--text-xs); color: var(--color-primary); margin-top: var(--space-3); font-weight: 600; }
+
+/* QUOTE */
+.quote {
+  border-left: 3px solid var(--color-primary);
+  padding: var(--space-3) var(--space-5);
+  margin-bottom: var(--space-6);
+  background: color-mix(in oklab, var(--color-primary) 4%, var(--color-surface));
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+.quote p { font-size: var(--text-sm); color: var(--color-text-muted); line-height: 1.7; font-style: italic; }
+.quote cite { display: block; margin-top: var(--space-2); font-size: var(--text-xs); color: var(--color-text-faint); font-style: normal; }
+
+/* PROGRESS STEPS */
+.builder-steps { display: flex; flex-direction: column; gap: var(--space-3); margin-bottom: var(--space-6); }
+.builder-step {
+  display: grid; grid-template-columns: 52px 1fr; gap: var(--space-4);
+  background: var(--color-surface); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: var(--space-4) var(--space-5);
+  transition: all var(--transition);
+}
+.builder-step:hover { border-color: color-mix(in oklab, var(--color-primary) 40%, var(--color-border)); box-shadow: var(--shadow-sm); }
+.builder-step-num {
+  display: flex; align-items: center; justify-content: center;
+  font-size: var(--text-xl); flex-shrink: 0;
+}
+.builder-step-content h4 { font-size: var(--text-sm); font-weight: 700; color: var(--color-text); margin-bottom: var(--space-1); }
+.builder-step-content p { font-size: var(--text-xs); color: var(--color-text-muted); line-height: 1.6; }
+.builder-step-content code { font-family: var(--font-mono); font-size: 11px; background: var(--color-surface-offset); padding: 1px 5px; border-radius: 3px; color: var(--color-primary); }
+
+/* FOOTER */
+.footer {
+  border-top: 1px solid var(--color-border);
+  padding: var(--space-8);
+  text-align: center;
+  color: var(--color-text-faint);
+  font-size: var(--text-xs);
+  max-width: 800px; margin: 0 auto;
+}
+.footer a { color: var(--color-text-muted); text-decoration: none; }
+.footer a:hover { color: var(--color-primary); }
+
+@media (max-width: 640px) {
+  .topbar { padding: var(--space-3) var(--space-4); }
+  .hero, .content, .toc-wrap { padding-left: var(--space-4); padding-right: var(--space-4); }
+  .hero { padding-top: var(--space-10); }
+  .cards-grid { grid-template-columns: 1fr; }
+  .resources { grid-template-columns: 1fr; }
+  .flow-step:not(:last-child)::after { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<nav class="topbar">
+  <div class="topbar-brand">
+    <div class="topbar-logo">x4</div>
+    <div>
+      <div class="topbar-name">x402 Protocol</div>
+      <div class="topbar-meta">Facilitator Deep Dive — 2026</div>
+    </div>
+  </div>
+  <button class="theme-toggle radius-full" data-theme-toggle aria-label="Toggle theme">
+    <span>🌙</span> <span>Dark</span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">⚡ Builder Guide</div>
+  <h1>Understanding the <span>x402 Facilitator</span></h1>
+  <p class="hero-desc">The trust layer that powers native HTTP payments — how it works, why it matters, and how to build your own from scratch.</p>
+  <div class="hero-tags">
+    <span class="tag tag-blue">🔵 Coinbase CDP</span>
+    <span class="tag tag-purple">🟣 Base Network</span>
+    <span class="tag tag-gold">🟡 Solana</span>
+    <span class="tag tag-primary">🟢 USDC / EIP-3009</span>
+    <span class="tag tag-orange">🔶 xpay.sh</span>
+    <span class="tag tag-blue">🔵 AltLayer</span>
+    <span class="tag tag-green">🌿 OpenZeppelin Relayer</span>
+    <span class="tag tag-primary">✦ x402 Ecosystem</span>
+  </div>
+  <div class="hero-meta">
+    <div class="hero-meta-item"><span class="icon">📅</span> April 2026</div>
+    <div class="hero-meta-item"><span class="icon">⏱️</span> ~8 min read</div>
+    <div class="hero-meta-item"><span class="icon">🏗️</span> Builder-focused</div>
+  </div>
+</section>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc-wrap">
+  <div class="toc">
+    <div class="toc-title">📋 Contents</div>
+    <ol>
+      <li><a href="#what-is-x402">What is x402?</a></li>
+      <li><a href="#what-is-facilitator">What is a Facilitator?</a></li>
+      <li><a href="#how-it-works">How It Works — Step by Step</a></li>
+      <li><a href="#endpoints">The 3 Required Endpoints</a></li>
+      <li><a href="#build-your-own">Build Your Own Facilitator</a></li>
+      <li><a href="#ecosystem">Ecosystem Facilitators</a></li>
+      <li><a href="#resources">Resources & Links</a></li>
+    </ol>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<main class="content">
+
+  <!-- SECTION 1: What is x402 -->
+  <section id="what-is-x402">
+    <div class="section-header">
+      <div class="section-icon icon-teal">💡</div>
+      <div>
+        <div class="section-number">01</div>
+        <h2>What is x402?</h2>
+      </div>
+    </div>
+
+    <p class="lead">x402 is an open HTTP payment standard that lets APIs and web services charge money <em>natively</em> — no subscriptions, no API keys, no redirects.</p>
+
+    <p class="body-text">At its core, x402 revives the long-forgotten <strong>HTTP 402 "Payment Required"</strong> status code. Instead of external payment flows, payments are embedded directly into HTTP headers as signed cryptographic payloads. The result: any resource on the web can be monetized per-request, including AI agent pipelines, data APIs, and premium content.</p>
+
+    <div class="callout callout-info">
+      <div class="callout-icon">⚡</div>
+      <div class="callout-body"><b>Key Use Cases:</b> AI agent marketplaces, pay-per-use APIs, micropayment content platforms, usage-based SaaS pricing, and any service requiring instant, verifiable on-chain payments.</div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">🤖</div>
+        <h3>AI Agent Payments</h3>
+        <p>Agents autonomously pay for tools, data, and compute without human checkout flows.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🧩</div>
+        <h3>Pay-Per-Request APIs</h3>
+        <p>Charge fractions of a cent per API call. No subscriptions, pure usage-based pricing.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔗</div>
+        <h3>Standard HTTP</h3>
+        <p>Works with existing web infrastructure. No new protocols or libraries required on the network layer.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🌐</div>
+        <h3>Multi-Chain</h3>
+        <p>Supported on Base, Solana, Polygon, Avalanche, Arbitrum, Optimism, and more.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTION 2: What is a Facilitator -->
+  <section id="what-is-facilitator">
+    <div class="section-header">
+      <div class="section-icon icon-orange">🛡️</div>
+      <div>
+        <div class="section-number">02</div>
+        <h2>What is a Facilitator?</h2>
+      </div>
+    </div>
+
+    <p class="lead">The Facilitator is the trust layer of x402 — an independent service that verifies payment validity and settles transactions on-chain so resource servers don't have to.</p>
+
+    <div class="callout callout-warn">
+      <div class="callout-icon">🔑</div>
+      <div class="callout-body"><b>Critical Distinction:</b> The facilitator is <b>not a custodian</b>. It never holds funds. Payments flow directly from buyer (client wallet) to seller (server wallet) via signed authorizations. The facilitator only verifies and submits.</div>
+    </div>
+
+    <p class="body-text">Think of the facilitator as a <strong>payment notary + blockchain relay</strong>. It receives a signed payment authorization, checks it's legitimate, then broadcasts the transaction on-chain. The server trusts the facilitator's verification result to decide whether to grant access.</p>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-icon">✅</div>
+        <h3>Verify Payments</h3>
+        <p>Confirms the signed payload is valid, has the correct amount and recipient, and hasn't been used before.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">⛓️</div>
+        <h3>Settle On-Chain</h3>
+        <p>Submits validated transactions to the blockchain, handles gas fees, and monitors for confirmation.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">📡</div>
+        <h3>Advertise Capabilities</h3>
+        <p>Exposes supported networks, token types, and payment schemes for client auto-discovery.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon">🔄</div>
+        <h3>Abstract Complexity</h3>
+        <p>Servers never touch blockchain nodes directly — the facilitator handles all chain-specific quirks.</p>
+      </div>
+    </div>
+
+    <div class="quote">
+      <p>"The facilitator acts as an independent verification and settlement layer within the x402 protocol. It helps servers confirm payments and submit transactions onchain without requiring direct blockchain infrastructure."</p>
+      <cite>— x402 Official Documentation, docs.x402.org</cite>
+    </div>
+  </section>
+
+  <!-- SECTION 3: How It Works -->
+  <section id="how-it-works">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🔄</div>
+      <div>
+        <div class="section-number">03</div>
+        <h2>How It Works — Full Flow</h2>
+      </div>
+    </div>
+
+    <p class="body-text">The x402 payment lifecycle involves four actors: <strong>Client</strong> (buyer), <strong>Resource Server</strong> (seller), <strong>Facilitator</strong> (trust layer), and the <strong>Blockchain</strong> (settlement layer). Here's the complete flow:</p>
+
+    <div class="flow">
+      <div class="flow-title">⚡ x402 Payment Flow (12 Steps)</div>
+      <div class="flow-steps">
+
+        <div class="flow-step">
+          <div class="flow-num flow-num-active">01</div>
+          <div class="flow-body">
+            <div class="flow-label">Client → Resource Server: Initial Request</div>
+            <div class="flow-desc">Client makes a normal HTTP GET/POST request to a protected endpoint. No payment header yet — just a regular request.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num flow-num-active">02</div>
+          <div class="flow-body">
+            <div class="flow-label">Resource Server → Client: 402 Payment Required</div>
+            <div class="flow-desc">Server responds with HTTP 402 and a <span class="flow-code">PAYMENT-REQUIRED</span> header containing Base64-encoded payment requirements: price, network, accepted tokens, and recipient address.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num flow-num-active">03</div>
+          <div class="flow-body">
+            <div class="flow-label">Client: Build Payment Payload</div>
+            <div class="flow-desc">Client parses the 402 response, selects a payment method from the <span class="flow-code">accepts</span> field, and creates a signed payment payload (EIP-3009 or SVM authorization). No gas needed for signing.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num flow-num-active">04</div>
+          <div class="flow-body">
+            <div class="flow-label">Client → Resource Server: Retry with Payment</div>
+            <div class="flow-desc">Client retries the original request, attaching the signed payload as <span class="flow-code">X-PAYMENT</span> header (Base64-encoded JSON).</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num flow-num-verify">05</div>
+          <div class="flow-body">
+            <div class="flow-label">Resource Server → Facilitator: POST /verify</div>
+            <div class="flow-desc">Server forwards the payment payload to the facilitator's <span class="flow-code">/verify</span> endpoint along with the original payment requirements.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num flow-num-verify">06</div>
+          <div class="flow-body">
+            <div class="flow-label">Facilitator: Verify Payload</div>
+            <div class="flow-desc">Facilitator validates signature, checks amount matches requirements, confirms recipient address, and ensures the payload hasn't been replayed. Returns <span class="flow-code">isValid: true/false</span>.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num flow-num-verify">07</div>
+          <div class="flow-body">
+            <div class="flow-label">Resource Server: Process Work</div>
+            <div class="flow-desc">If verification is valid, server performs the requested operation (generates data, serves content, runs compute, etc.). If invalid, returns another 402.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num flow-num-settle">08</div>
+          <div class="flow-body">
+            <div class="flow-label">Resource Server → Facilitator: POST /settle</div>
+            <div class="flow-desc">After work is complete, server asks facilitator to settle the payment on-chain by calling the <span class="flow-code">/settle</span> endpoint with the same payload.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num flow-num-settle">09</div>
+          <div class="flow-body">
+            <div class="flow-label">Facilitator → Blockchain: Submit Transaction</div>
+            <div class="flow-desc">Facilitator broadcasts the signed <span class="flow-code">transferWithAuthorization</span> (EIP-3009) or equivalent SVM transaction to the blockchain.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num flow-num-settle">10</div>
+          <div class="flow-body">
+            <div class="flow-label">Facilitator: Wait for Confirmation</div>
+            <div class="flow-desc">Facilitator monitors the blockchain for transaction confirmation, handling retries or failures as needed.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num flow-num-done">11</div>
+          <div class="flow-body">
+            <div class="flow-label">Facilitator → Resource Server: Settlement Response</div>
+            <div class="flow-desc">Returns a <span class="flow-code">PaymentExecutionResponse</span> with the transaction hash as proof of settlement.</div>
+          </div>
+        </div>
+
+        <div class="flow-step">
+          <div class="flow-num flow-num-done">12</div>
+          <div class="flow-body">
+            <div class="flow-label">Resource Server → Client: 200 OK + Receipt</div>
+            <div class="flow-desc">Server returns the requested resource with a <span class="flow-code">PAYMENT-RESPONSE</span> header containing the settlement proof. Success!</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="callout callout-tip">
+      <div class="callout-icon">⚠️</div>
+      <div class="callout-body"><b>Solana Duplicate Settlement Warning:</b> On Solana, multiple /settle calls for the same transaction before confirmation can all return success (network deduplication). Always implement a <b>SettlementCache</b> (120s TTL) in your Solana facilitator to prevent replay attacks.</div>
+    </div>
+  </section>
+
+  <!-- SECTION 4: The 3 Endpoints -->
+  <section id="endpoints">
+    <div class="section-header">
+      <div class="section-icon icon-blue">🔌</div>
+      <div>
+        <div class="section-number">04</div>
+        <h2>The 3 Required Endpoints</h2>
+      </div>
+    </div>
+
+    <p class="body-text">Every x402 facilitator must implement exactly three HTTP endpoints. These form the public interface of your facilitator service.</p>
+
+    <div class="endpoint-group">
+
+      <div class="endpoint">
+        <div class="endpoint-header">
+          <span class="method method-post">POST</span>
+          <span class="endpoint-path">/verify</span>
+        </div>
+        <div class="endpoint-body">
+          <p>Validates a payment payload <strong>without</strong> broadcasting to the blockchain. Used by the resource server before doing any work.</p>
+          <div class="param-list">
+            <div class="param"><span class="param-name">payload</span><span class="param-desc">Base64-encoded signed payment payload from the client's X-PAYMENT header</span></div>
+            <div class="param"><span class="param-name">requirements</span><span class="param-desc">Payment requirements from the 402 response (amount, recipient, network, scheme)</span></div>
+            <div class="param"><span class="param-name">→ returns</span><span class="param-desc"><code>{ isValid: boolean, invalidReason?: string }</code></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint-header">
+          <span class="method method-post">POST</span>
+          <span class="endpoint-path">/settle</span>
+        </div>
+        <div class="endpoint-body">
+          <p>Submits the payment transaction on-chain and waits for confirmation. Called by the server after work is complete.</p>
+          <div class="param-list">
+            <div class="param"><span class="param-name">payload</span><span class="param-desc">Same payment payload sent to /verify</span></div>
+            <div class="param"><span class="param-name">requirements</span><span class="param-desc">Same payment requirements from the 402 response</span></div>
+            <div class="param"><span class="param-name">→ returns</span><span class="param-desc"><code>{ success: boolean, txHash: string, network: string }</code></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint-header">
+          <span class="method method-get">GET</span>
+          <span class="endpoint-path">/supported</span>
+        </div>
+        <div class="endpoint-body">
+          <p>Advertises what networks, tokens, and payment schemes this facilitator supports. Enables client auto-discovery.</p>
+          <div class="param-list">
+            <div class="param"><span class="param-name">→ returns</span><span class="param-desc"><code>{ x402Version: string, schemes: [...], networks: [...], feePayer: string }</code></span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SECTION 5: Build Your Own -->
+  <section id="build-your-own">
+    <div class="section-header">
+      <div class="section-icon icon-gold">🏗️</div>
+      <div>
+        <div class="section-number">05</div>
+        <h2>Build Your Own Facilitator</h2>
+      </div>
+    </div>
+
+    <p class="lead">Building a custom facilitator gives you full control over supported networks, token types, fee policies, and settlement logic. Here's the complete path from zero to running facilitator.</p>
+
+    <div class="callout callout-info">
+      <div class="callout-icon">📦</div>
+      <div class="callout-body"><b>Official SDK Support:</b> x402 provides TypeScript, Python, and Go packages. The TypeScript SDK (<code>@coinbase/x402</code>) includes facilitator registration helpers for both EVM (EIP-3009) and SVM (Solana) payment schemes.</div>
+    </div>
+
+    <div class="builder-steps">
+      <div class="builder-step">
+        <div class="builder-step-num">📦</div>
+        <div class="builder-step-content">
+          <h4>Step 1 — Install the x402 Facilitator Package</h4>
+          <p>Start with the official SDK. Install <code>@coinbase/x402</code> for TypeScript or use the Python/Go equivalents. This gives you scheme registration helpers and payload parsing utilities.</p>
+        </div>
+      </div>
+      <div class="builder-step">
+        <div class="builder-step-num">⚙️</div>
+        <div class="builder-step-content">
+          <h4>Step 2 — Set Up a Web Server</h4>
+          <p>Spin up any HTTP server (Express, Fastify, Hono, etc.). Your facilitator is just a standard REST service. Expose it over HTTPS on a public URL.</p>
+        </div>
+      </div>
+      <div class="builder-step">
+        <div class="builder-step-num">🔐</div>
+        <div class="builder-step-content">
+          <h4>Step 3 — Configure a Signing Wallet</h4>
+          <p>Your facilitator needs a wallet (fee payer) that will pay gas fees when submitting transactions. On EVM chains (Base), use an EOA with ETH. On Solana, use a keypair with SOL or integrate Kora for gasless signing.</p>
+        </div>
+      </div>
+      <div class="builder-step">
+        <div class="builder-step-num">🔌</div>
+        <div class="builder-step-content">
+          <h4>Step 4 — Register Payment Schemes</h4>
+          <p>Register which payment schemes your facilitator supports using the SDK helpers: <code>registerEVMFacilitatorScheme()</code> for Base/EVM networks (EIP-3009 USDC), or <code>registerSVMFacilitatorScheme()</code> for Solana. Each scheme handles its own verify/settle logic.</p>
+        </div>
+      </div>
+      <div class="builder-step">
+        <div class="builder-step-num">🛣️</div>
+        <div class="builder-step-content">
+          <h4>Step 5 — Wire Up the 3 Endpoints</h4>
+          <p>Implement <code>POST /verify</code>, <code>POST /settle</code>, and <code>GET /supported</code>. The SDK provides handler factories that do the heavy lifting — you just plug them into your router.</p>
+        </div>
+      </div>
+      <div class="builder-step">
+        <div class="builder-step-num">🛡️</div>
+        <div class="builder-step-content">
+          <h4>Step 6 — Add Replay Protection (Critical for Solana)</h4>
+          <p>For Solana, initialize a <code>SettlementCache</code> and pass it to both V1 and V2 SVM scheme registrations. For EVM, EIP-3009's nonce mechanism handles replay protection natively.</p>
+        </div>
+      </div>
+      <div class="builder-step">
+        <div class="builder-step-num">🧪</div>
+        <div class="builder-step-content">
+          <h4>Step 7 — Test on Devnet / Testnet</h4>
+          <p>Run against Base Sepolia or Solana Devnet. Use Circle's USDC faucet for test tokens. Verify all three endpoints with the x402 test client before moving to mainnet.</p>
+        </div>
+      </div>
+      <div class="builder-step">
+        <div class="builder-step-num">🚀</div>
+        <div class="builder-step-content">
+          <h4>Step 8 — Deploy and Register in the Ecosystem</h4>
+          <p>Deploy your facilitator with a public HTTPS URL. Submit a PR to the x402 GitHub ecosystem directory to list your facilitator alongside Coinbase CDP, xpay, AltLayer, and others.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="body-text" style="margin-bottom: var(--space-4);">Here's a minimal TypeScript facilitator setup using Express and the x402 SDK:</p>
+
+    <div class="code-wrap">
+      <div class="code-label">TypeScript / Node.js</div>
+      <div class="code-block"><span class="comment">// Install: npm install @coinbase/x402 express viem</span>
+
+<span class="keyword">import</span> express <span class="keyword">from</span> <span class="string">'express'</span>;
+<span class="keyword">import</span> { createFacilitatorRoutes, registerEVMScheme } <span class="keyword">from</span> <span class="string">'@coinbase/x402/facilitator'</span>;
+<span class="keyword">import</span> { createWalletClient, http } <span class="keyword">from</span> <span class="string">'viem'</span>;
+<span class="keyword">import</span> { privateKeyToAccount } <span class="keyword">from</span> <span class="string">'viem/accounts'</span>;
+<span class="keyword">import</span> { base } <span class="keyword">from</span> <span class="string">'viem/chains'</span>;
+
+<span class="keyword">const</span> app = express();
+app.<span class="func">use</span>(express.<span class="func">json</span>());
+
+<span class="comment">// 1. Set up fee-payer wallet (pays gas on Base)</span>
+<span class="keyword">const</span> account = <span class="func">privateKeyToAccount</span>(process.env.<span class="const">FEE_PAYER_KEY</span> <span class="keyword">as</span> <span class="type">`0x${string}`</span>);
+<span class="keyword">const</span> walletClient = <span class="func">createWalletClient</span>({
+  account, chain: base, transport: <span class="func">http</span>()
+});
+
+<span class="comment">// 2. Register EVM payment scheme (Base mainnet, USDC EIP-3009)</span>
+<span class="keyword">const</span> schemes = <span class="func">registerEVMScheme</span>(walletClient, {
+  network: <span class="string">'base'</span>,
+  usdcAddress: <span class="string">'0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913'</span>
+});
+
+<span class="comment">// 3. Wire up all 3 required endpoints automatically</span>
+app.<span class="func">use</span>(<span class="string">'/'</span>, <span class="func">createFacilitatorRoutes</span>(schemes));
+
+<span class="comment">// 4. Start server</span>
+app.<span class="func">listen</span>(<span class="const">3000</span>, () =&gt; {
+  console.<span class="func">log</span>(<span class="string">'🚀 Facilitator running at http://localhost:3000'</span>);
+});</div>
+    </div>
+
+    <div class="callout callout-tip">
+      <div class="callout-icon">💡</div>
+      <div class="callout-body"><b>Pro Tip — Custom Facilitator Use Cases:</b> Build a custom facilitator when you need: (1) a specific chain not yet in the ecosystem, (2) a custom token beyond USDC, (3) gasless UX via Kora/Paymaster integration, (4) custom fee sharing logic, or (5) private enterprise deployment where you don't want to use Coinbase's hosted service.</div>
+    </div>
+  </section>
+
+  <!-- SECTION 6: Ecosystem -->
+  <section id="ecosystem">
+    <div class="section-header">
+      <div class="section-icon icon-green">🌐</div>
+      <div>
+        <div class="section-number">06</div>
+        <h2>Ecosystem Facilitators</h2>
+      </div>
+    </div>
+
+    <p class="body-text">Multiple production facilitators are available today. You can use any of them by pointing your server's <code>facilitatorUrl</code> config to their endpoint. They compete on supported networks, reliability, and fee structures.</p>
+
+    <table class="eco-table">
+      <thead>
+        <tr>
+          <th>Facilitator</th>
+          <th>Networks</th>
+          <th>Status</th>
+          <th>Free Tier</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><a href="https://docs.cdp.coinbase.com/x402" class="eco-link" target="_blank">🔵 Coinbase CDP</a></td>
+          <td>Base, Base Sepolia</td>
+          <td><span class="badge-sm badge-live">LIVE</span></td>
+          <td>1,000 tx/mo</td>
+        </tr>
+        <tr>
+          <td><a href="https://docs.xpay.sh/en/x402-protocol/facilitator" class="eco-link" target="_blank">🟠 xpay.sh</a></td>
+          <td>Base Mainnet + Testnet</td>
+          <td><span class="badge-sm badge-live">LIVE</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="https://docs.altlayer.io/altlayer-documentation/x402-product-suite/facilitator" class="eco-link" target="_blank">🔷 AltLayer</a></td>
+          <td>Base, Solana, Polygon, Avalanche, Arbitrum, Optimism</td>
+          <td><span class="badge-sm badge-live">LIVE</span></td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><a href="https://docs.openzeppelin.com/relayer/guides/stellar-x402-facilitator-guide" class="eco-link" target="_blank">🛡️ OpenZeppelin Relayer</a></td>
+          <td>Stellar</td>
+          <td><span class="badge-sm badge-live">LIVE</span></td>
+          <td>Plugin</td>
+        </tr>
+        <tr>
+          <td><a href="https://solana.com/developers/guides/getstarted/build-a-x402-facilitator" class="eco-link" target="_blank">🟡 Kora (Solana)</a></td>
+          <td>Solana Mainnet + Devnet</td>
+          <td><span class="badge-sm badge-live">LIVE</span></td>
+          <td>Self-hosted</td>
+        </tr>
+        <tr>
+          <td><a href="https://hedera.com/blog/hedera-and-the-x402-payment-standard/" class="eco-link" target="_blank">💜 BlockyDevs / Hedera</a></td>
+          <td>Hedera, Base, Solana, Arbitrum, Optimism, Avalanche</td>
+          <td><span class="badge-sm badge-beta">BETA</span></td>
+          <td>Open source</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-info">
+      <div class="callout-icon">🔓</div>
+      <div class="callout-body"><b>Open Architecture:</b> The x402 protocol is designed so <b>anyone can run their own facilitator</b>. The ecosystem does not depend on any single company. Coinbase's hosted facilitator has a free tier of 1,000 transactions/month — ideal for getting started before deploying your own.</div>
+    </div>
+  </section>
+
+  <!-- SECTION 7: Resources -->
+  <section id="resources">
+    <div class="section-header">
+      <div class="section-icon icon-purple">🔗</div>
+      <div>
+        <div class="section-number">07</div>
+        <h2>Resources & Links</h2>
+      </div>
+    </div>
+
+    <div class="resources">
+      <a href="https://docs.x402.org/core-concepts/facilitator" class="resource" target="_blank">
+        <div class="resource-icon">📘</div>
+        <div class="resource-name">x402 Facilitator Docs</div>
+        <div class="resource-desc">Official x402 facilitator documentation — core concepts, interaction flow, and specs.</div>
+        <div class="resource-arrow">docs.x402.org →</div>
+      </a>
+      <a href="https://github.com/coinbase/x402" class="resource" target="_blank">
+        <div class="resource-icon">🐙</div>
+        <div class="resource-name">x402 GitHub Repository</div>
+        <div class="resource-desc">Official TypeScript SDK, Python and Go packages, and facilitator reference implementations.</div>
+        <div class="resource-arrow">github.com/coinbase/x402 →</div>
+      </a>
+      <a href="https://solana.com/developers/guides/getstarted/build-a-x402-facilitator" class="resource" target="_blank">
+        <div class="resource-icon">🟡</div>
+        <div class="resource-name">Build a Solana Facilitator</div>
+        <div class="resource-desc">Step-by-step guide to building an x402 facilitator with Kora gasless signing on Solana.</div>
+        <div class="resource-arrow">solana.com/developers →</div>
+      </a>
+      <a href="https://docs.cdp.coinbase.com/x402/core-concepts/how-it-works" class="resource" target="_blank">
+        <div class="resource-icon">🔵</div>
+        <div class="resource-name">Coinbase CDP x402 Guide</div>
+        <div class="resource-desc">Full protocol walkthrough including client/server roles, HTTP 402 spec, and Coinbase facilitator setup.</div>
+        <div class="resource-arrow">docs.cdp.coinbase.com →</div>
+      </a>
+      <a href="https://docs.xpay.sh/en/x402-protocol/facilitator" class="resource" target="_blank">
+        <div class="resource-icon">🟠</div>
+        <div class="resource-name">xpay Facilitator API</div>
+        <div class="resource-desc">Public x402 facilitator API at facilitator.xpay.sh — USDC on Base mainnet and testnet.</div>
+        <div class="resource-arrow">docs.xpay.sh →</div>
+      </a>
+      <a href="https://docs.altlayer.io/altlayer-documentation/x402-product-suite/facilitator" class="resource" target="_blank">
+        <div class="resource-icon">🔷</div>
+        <div class="resource-name">AltLayer x402 Suite</div>
+        <div class="resource-desc">Multi-chain facilitator covering Base, Solana, Polygon, Avalanche, Arbitrum, and Optimism.</div>
+        <div class="resource-arrow">docs.altlayer.io →</div>
+      </a>
+      <a href="https://sherlock.xyz/post/x402-explained-the-http-402-payment-protocol" class="resource" target="_blank">
+        <div class="resource-icon">📰</div>
+        <div class="resource-name">x402 Explained — Sherlock</div>
+        <div class="resource-desc">Clear, concise explanation of the full x402 protocol stack including the facilitator's trust role.</div>
+        <div class="resource-arrow">sherlock.xyz →</div>
+      </a>
+      <a href="https://docs.openzeppelin.com/relayer/guides/stellar-x402-facilitator-guide" class="resource" target="_blank">
+        <div class="resource-icon">🛡️</div>
+        <div class="resource-name">OpenZeppelin x402 (Stellar)</div>
+        <div class="resource-desc">Plugin-based facilitator for OpenZeppelin Relayer, targeting Stellar mainnet and testnet.</div>
+        <div class="resource-arrow">docs.openzeppelin.com →</div>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <p>Built for the <strong>BTCFi Station</strong> community &nbsp;·&nbsp; x402 Protocol Research &nbsp;·&nbsp; April 2026</p>
+  <p style="margin-top: var(--space-2);">
+    <a href="https://x402.org" target="_blank">x402.org</a> &nbsp;·&nbsp;
+    <a href="https://docs.x402.org" target="_blank">Docs</a> &nbsp;·&nbsp;
+    <a href="https://github.com/coinbase/x402" target="_blank">GitHub</a>
+  </p>
+</footer>
+
+<script>
+(function(){
+  const t = document.querySelector('[data-theme-toggle]');
+  const r = document.documentElement;
+  let d = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  r.setAttribute('data-theme', d);
+  if(t) {
+    t.addEventListener('click', () => {
+      d = d === 'dark' ? 'light' : 'dark';
+      r.setAttribute('data-theme', d);
+      t.innerHTML = d === 'dark'
+        ? '<span>🌙</span><span>Dark</span>'
+        : '<span>☀️</span><span>Light</span>';
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
