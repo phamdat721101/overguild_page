@@ -6,7 +6,7 @@ category: AI & Web3
 author: Terminal_Admin
 readTime: 8 MIN READ
 coverImage: /blog/facilitator.png
-featured: true
+featured: false
 ---
 
 > The trust layer that powers native HTTP payments — how it works, why it matters, and how to build your own from scratch.
