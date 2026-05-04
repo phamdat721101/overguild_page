@@ -6,7 +6,7 @@ category: AI & Web3
 author: Terminal_Admin
 readTime: 10 MIN READ
 coverImage: /blog/x402-harness/harness-architecture.svg
-featured: true
+featured: false
 ---
 
 > The internet just upgraded itself. AI agents no longer need API keys, billing dashboards, or OAuth flows to consume web services. With **x402** and **Browser Harness**, an agent can browse, pay, and use any service in a single seamless flow — at internet speed.
