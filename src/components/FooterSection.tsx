@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import logo from "@/assets/logo.svg";
 
 const DOCS_URL = "https://docs.overguild.xyz";
-const LEO_BOOK_URL = "https://www.leo-book.xyz/";
+const OPENX_URL = "https://openx.the-valley.xyz/";
 
 const BLOCK_COUNT = 15;
 const LIT_START = 5;
@@ -27,8 +27,8 @@ const FooterSection = () => {
             <Link to="/blog">
               Blog
             </Link>
-            <a href={LEO_BOOK_URL} target="_blank" rel="noopener noreferrer">
-              Leo-book
+            <a href={OPENX_URL} target="_blank" rel="noopener noreferrer">
+              OpenX
             </a>
           </nav>
 

@@ -4,13 +4,16 @@ import { Link, useLocation } from "react-router-dom";
 import logo from "@/assets/logo.svg";
 
 const NAV_LINKS = [
-  { label: "Academy", href: "/#academy" },
-  { label: "Archive", href: "/#archive" },
-  { label: "The Valley", href: "/#valley" },
+  { label: "Home", href: "/" },
   { label: "Community", href: "/community" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/#contact" },
 ];
+
+const isPageLink = (href: string) => !href.includes("#");
+const isActiveLink = (href: string, pathname: string) =>
+  isPageLink(href) &&
+  (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -65,8 +68,7 @@ const Navbar = () => {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
             {NAV_LINKS.map((link) => {
-              const isPage = !link.href.includes("#");
-              const isActive = isPage && location.pathname.startsWith(link.href);
+              const isActive = isActiveLink(link.href, location.pathname);
               return (
                 <Link
                   key={link.href}
@@ -108,8 +110,7 @@ const Navbar = () => {
           >
             <div className="container mx-auto px-6 py-2 flex flex-col">
               {NAV_LINKS.map((link) => {
-                const isPage = !link.href.includes("#");
-                const isActive = isPage && location.pathname.startsWith(link.href);
+                const isActive = isActiveLink(link.href, location.pathname);
                 return (
                   <Link
                     key={link.href}

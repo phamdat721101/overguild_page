@@ -89,7 +89,7 @@ const JoinSection = () => {
             <span className="text-glow-cyan text-primary">OverGuild</span>
           </h2>
           <p className="text-muted-foreground mb-8 text-base">
-            Follow us for updates, community, and Season 1.
+            Follow us for updates and community announcements.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
