@@ -5,6 +5,9 @@ import logo from "@/assets/logo.svg";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
+  { label: "Proof", href: "/#traction" },
+  { label: "Networks", href: "/#networks" },
+  { label: "Code", href: "/#code-sandbox" },
   { label: "Community", href: "/community" },
   { label: "Blog", href: "/blog" },
   { label: "Contact", href: "/#contact" },

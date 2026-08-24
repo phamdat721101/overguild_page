@@ -4,13 +4,18 @@ import IntroSection from "@/components/IntroSection";
 import JourneySection from "@/components/JourneySection";
 import JoinSection from "@/components/JoinSection";
 import FooterSection from "@/components/FooterSection";
+import { CodeSandboxSection, NetworkShowcaseSection, TractionSection } from "@/components/EcosystemShowcase";
+import { partnerLinks } from "@/data/ecosystemShowcase";
 
 const Index = () => {
   return (
     <div className="relative min-h-screen bg-background text-foreground overflow-x-hidden scanlines">
       <Navbar />
       <IntroSection />
+      <TractionSection />
       <JourneySection />
+      <NetworkShowcaseSection />
+      <CodeSandboxSection />
 
       {/* Partners Section */}
       <section className="relative py-20 px-4 text-center overflow-hidden">
@@ -30,11 +35,7 @@ const Index = () => {
           />
 
           <div className="flex flex-wrap justify-center items-stretch gap-6 md:gap-8">
-            {[
-              { name: "Rootstock", href: "https://rootstock.io", logo: "/partners/rootstock.svg" },
-              { name: "Cardano Foundation", href: "https://cardanofoundation.org", logo: "/partners/cardano.svg" },
-              { name: "Creditcoin", href: "https://creditcoin.org", logo: "/partners/creditcoin.svg" },
-            ].map(({ name, href, logo }, i) => (
+            {partnerLinks.map(({ name, href, logo }, i) => (
               <motion.a
                 key={name}
                 href={href}
@@ -46,14 +47,7 @@ const Index = () => {
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
               >
-                <img
-                  src={logo}
-                  alt={name}
-                  className="h-16 w-auto transition-all duration-300"
-                  style={{ filter: "brightness(0) invert(1) opacity(0.7)" }}
-                  onMouseEnter={e => (e.currentTarget.style.filter = "brightness(0) invert(1) drop-shadow(0 0 10px hsl(180 100% 50%))")}
-                  onMouseLeave={e => (e.currentTarget.style.filter = "brightness(0) invert(1) opacity(0.7)")}
-                />
+                {logo ? <img src={logo} alt={name} className="h-16 w-auto transition-all duration-300" style={{ filter: "brightness(0) invert(1) opacity(0.7)" }} onMouseEnter={e => (e.currentTarget.style.filter = "brightness(0) invert(1) drop-shadow(0 0 10px hsl(180 100% 50%))")} onMouseLeave={e => (e.currentTarget.style.filter = "brightness(0) invert(1) opacity(0.7)")} /> : <span className="font-pixel text-xl text-primary text-glow-cyan">{name.split(" ")[0]}</span>}
                 <span className="font-pixel text-[9px] text-primary/50 group-hover:text-primary/80 transition-colors duration-300 text-center leading-relaxed">
                   {name.toUpperCase()}
                 </span>

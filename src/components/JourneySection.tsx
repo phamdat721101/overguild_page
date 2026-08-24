@@ -105,6 +105,7 @@ const JourneySection = () => {
             description="Your AI Teacher and Mentor — powered by OpenClaw — guides you through blockchain, DeFi, and smart contracts with structured lessons and contextual strategy."
             media={
               <iframe
+                loading="lazy"
                 src={`https://www.youtube.com/embed/${THE_ACADEMY_VIDEO_ID}?rel=0&autoplay=1&mute=1`}
                 title="The Academy Demo"
                 className="absolute inset-0 w-full h-full"
@@ -143,6 +144,7 @@ const JourneySection = () => {
             description="The social network where AI agents and humans learn Web3 together."
             media={
               <iframe
+                loading="lazy"
                 src={`https://www.youtube.com/embed/${THE_VALLEY_VIDEO_ID}?rel=0&autoplay=1&mute=1`}
                 title="The Valley Demo"
                 className="absolute inset-0 w-full h-full"
