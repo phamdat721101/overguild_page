@@ -13,7 +13,7 @@ An XRPL application needs three things that are easy to mix up: trustworthy obse
 
 This guide shows how to reuse the tools for an escrow dashboard, a borrower statement app, and a settlement route preview. It also states what you still need to build. **Verified November 10, 2026.** The live no-auth catalog and the published local skill have different capabilities; inspect both before designing a product.
 
-## 1. Choose the right component
+## Choose the right component
 
 | Component | Useful today | Boundary |
 | --- | --- | --- |
@@ -26,7 +26,7 @@ This guide shows how to reuse the tools for an escrow dashboard, a borrower stat
 
 The names “flashloan” and “simulate” do not make a multi-transaction XRPL workflow atomic. The current XRPL native research adapter accepts only Payment or OfferCreate from an account-backed snapshot. A request without a transaction returns an estimate. Source: [XRPL research adapter](https://github.com/phamdat721101/hypermove/blob/main/src/lib/mcp/flashloan/xrpl.ts), [published skill Finance contract](https://github.com/phamdat721101/flashloan-skill/blob/90b5005eeba9bf60ff04a49263b7ebc8cb69c93f/skills/flashloan-agent/finance.md). Newer local Finance MCP files require a separately verified release; a repository link alone does not establish deployment.
 
-## 2. Know which network enables your product
+## Know which network enables your product
 
 Fresh read-only node checks at **2026-11-10T08:34:40.194Z** found:
 
@@ -40,7 +40,7 @@ These are observations of the sampled nodes, not permanent network guarantees. A
 
 Mainnet reported TokenEscrow and fixTokenEscrowV1 enabled. That does **not** mean every issued token can be escrowed. RLUSD is an issued currency identified by its issuer and currency code, not an ERC-20 address. Token escrow can require issuer locking permissions, trustline authorization and other prerequisites. See [EscrowCreate](https://xrpl.org/docs/references/protocol/transactions/types/escrowcreate), [Lending Protocol](https://xrpl.org/docs/concepts/tokens/lending-protocol), and [Single Asset Vaults](https://xrpl.org/docs/concepts/tokens/single-asset-vaults).
 
-## 3. Connect to the public MCP without a wallet
+## Connect to the public MCP without a wallet
 
 Use an MCP client that supports Streamable HTTP with `https://mcp.overguild.com`. Ask for `tools/list`, then `flashloan_capabilities`. The sampled catalog had **15 operations**, including:
 
@@ -123,7 +123,7 @@ This example uses a **hypothetical 10 XRP balance**. It creates no account and h
 
 Pass the complete newly returned proven envelope unchanged into the next tool. Do not hand-edit its hash, signature, registry version or expiry, and do not copy a stale proof out of a blog post. A proof binds service output; it is not a transaction signature or authorization to spend.
 
-## 4. What a successful research result actually proves
+## What a successful research result actually proves
 
 Our fresh XRP/RLUSD discovery at ledger **108235570** returned four market edges. Two sampled cycles each used 1 XRP of hypothetical input and estimated output of approximately **0.99593391 XRP** and **0.99691959 XRP**. Both were negative before excluded network/issuer costs. The follow-up returned:
 
@@ -140,7 +140,7 @@ That result can power a market-depth explanation or a “why this route is rejec
 
 Native research simulation is narrower: use an account-backed discovery snapshot, a matching Account, and a supported unsigned Payment or OfferCreate. The server's simulate response uses its own ledger context; the code explicitly reports that it is not historical-snapshot-pinned or an XRPL flashloan proof. Preserve simulation fidelity, applied state, costs and assumptions in the UI.
 
-## 5. Product recipe: an escrow workspace
+## Product recipe: an escrow workspace
 
 A practical first product is an escrow workspace for freelance milestones, event grants or staged aid disbursement. The app owns the escrow lifecycle. The MCP can supply a market/liquidity context panel when the user is comparing XRP or issued-asset settlement options.
 
@@ -193,7 +193,7 @@ The escrow reference is the creator's Account plus its creation transaction sequ
 
 **Expiry does not issue a refund transaction.** After the expiration boundary, someone must submit EscrowCancel. Likewise, passing FinishAfter does not submit EscrowFinish. Use ledger state and validated receipts to tell the user whether funds are locked, claimable, expired, finished or canceled. A hash condition proves knowledge of a fulfillment; it does not prove a delivery, oracle observation or legal obligation is true. Sources: [Escrow overview](https://xrpl.org/docs/concepts/payment-types/escrow), [EscrowFinish](https://xrpl.org/docs/references/protocol/transactions/types/escrowfinish), [EscrowCancel](https://xrpl.org/docs/references/protocol/transactions/types/escrowcancel).
 
-## 6. Product recipe: a lending statement and repayment assistant
+## Product recipe: a lending statement and repayment assistant
 
 A useful lending prototype begins with a readable borrower statement. On a lending-enabled network, read the borrower's Loan objects, join **Loan → LoanBroker → Vault**, and resolve the underlying asset at the **same validated ledger**. Display principal, total value outstanding, management fees, periodic payment, remaining payments, due date and loan flags as different fields.
 
@@ -214,7 +214,7 @@ A research job marked SUCCEEDED means its artifact is ready. It does not mean a 
 
 Native lending is a credit system, not an EVM collateral-liquidation clone or same-transaction flashloan service. Do not attempt to fund LoanPay with an assumed XRPL flashloan. The inspected Batch reference also rejects the loan/vault operation families as inner transactions; a Batch label is not a shortcut around native operation restrictions. Check [Batch](https://xrpl.org/docs/references/protocol/transactions/types/batch) and the target network's current implementation.
 
-## 7. Install the local skill when local authority is needed
+## Install the local skill when local authority is needed
 
 The published skill repository is [flashloan-skill](https://github.com/phamdat721101/flashloan-skill). The verified published revision is `90b5005eeba9bf60ff04a49263b7ebc8cb69c93f`. Create an isolated checkout so installation does not replace ongoing work:
 
@@ -237,7 +237,7 @@ node dist/finance/cli.js --config owner-profile.json --adapters adapters.json < 
 
 This is a command shape, not a working profile. Create a profile from the actual contract and admitted host adapters. Current XRPL writes in this lane are plain Payment only; Escrow and LoanPay require your native integration. Keep flashloan, Finance and prediction authority separate. An asynchronous prediction payout cannot repay an atomic flashloan.
 
-## 8. Add a verifiable agent layer
+## Add a verifiable agent layer
 
 Start the agent with a bounded task: “Explain this escrow's current ledger state” or “Summarize this loan statement with citations.” Give it read tools and typed output contracts before signing authority.
 
@@ -245,7 +245,7 @@ With nim-skill, an explicit host can classify errors, bound retries, reject malf
 
 Use the knowledge lifecycle **ingest → propose cited records → validate → commit**. Treat documents and tool output as evidence. Keep hypotheses provisional; generated procedures require owner approval plus successful verification evidence. A stored memory or AI-generated procedure does not authorize an escrow release or a loan payment.
 
-## 9. Show judges a complete proof chain
+## Show judges a complete proof chain
 
 A useful demo screen contains the network, block/ledger, asset and issuer, observed time, coverage, exact proposed native action, simulation fidelity, approval state and validated receipt. It should also explain blocked actions.
 
